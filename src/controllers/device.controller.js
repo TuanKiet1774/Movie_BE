@@ -58,7 +58,8 @@ exports.getDeviceById = async (req, res) => {
     const deviceId = req.params.deviceId || req.query.deviceId;
 
     if (!deviceId) {
-      return this.getDevices(req, res);
+      const devices = await Device.find().sort({ lastActiveAt: -1 });
+      return res.json(devices);
     }
 
     const device = await Device.findOne({ deviceId });
