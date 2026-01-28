@@ -4,17 +4,15 @@ const app = require("./src/app");
 
 const PORT = process.env.PORT || 3000;
 
-(async () => {
-  try {
-    console.log("🚀 Starting server...");
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ MongoDB connected");
+app.listen(PORT, "0.0.0.0", async () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
+  try {
+    console.log("⏳ Connecting to MongoDB...");
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB connected successfully");
   } catch (error) {
-    console.error("❌ Server startup failed:", error.message);
-    process.exit(1);
+    console.error("❌ MongoDB connection failed:", error.message);
+    console.log("⚠️ Application is running but Database is not connected.");
   }
-})();
+});
