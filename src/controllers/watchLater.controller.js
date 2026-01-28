@@ -43,13 +43,12 @@ exports.getWatchLaterByDevice = async (req, res) => {
   try {
     const deviceId = req.params.deviceId || req.query.deviceId;
 
-    if (!deviceId) {
-      return res.status(400).json({
-        message: "deviceId is required",
-      });
+    const filter = {};
+    if (deviceId) {
+      filter.deviceId = deviceId;
     }
 
-    const list = await WatchLater.find({ deviceId }).sort({ createdAt: -1 });
+    const list = await WatchLater.find(filter).sort({ createdAt: -1 });
 
     res.json(list);
   } catch (error) {

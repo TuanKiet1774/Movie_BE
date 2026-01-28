@@ -34,12 +34,32 @@ exports.upsertDevice = async (req, res) => {
 };
 
 /**
+ * GET /devices
+ * Lấy danh sách tất cả device
+ */
+exports.getDevices = async (req, res) => {
+  try {
+    const devices = await Device.find().sort({ lastActiveAt: -1 });
+    res.json(devices);
+  } catch (error) {
+    res.status(500).json({
+      message: "Get devices failed",
+      error: error.message,
+    });
+  }
+};
+
+/**
  * GET /devices/:deviceId
  * Lấy thông tin device
  */
 exports.getDeviceById = async (req, res) => {
   try {
-    const { deviceId } = req.params;
+    const deviceId = req.params.deviceId || req.query.deviceId;
+
+    if (!deviceId) {
+      return this.getDevices(req, res);
+    }
 
     const device = await Device.findOne({ deviceId });
 

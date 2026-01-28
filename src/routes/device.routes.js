@@ -3,6 +3,7 @@ const router = express.Router();
 const deviceController = require("../controllers/device.controller");
 
 router.post("/", deviceController.upsertDevice);
+router.get("/", deviceController.getDevices);
 router.get("/:deviceId", deviceController.getDeviceById);
 
 module.exports = router;
