@@ -3,13 +3,13 @@ const mongoose = require("mongoose");
 const watchLaterSchema = new mongoose.Schema(
   {
     deviceId: {
-      type: String,
+      type: String, 
       required: true,
       index: true,
     },
 
     movieSlug: {
-      type: String,
+      type: String, 
       required: true,
       index: true,
     },
