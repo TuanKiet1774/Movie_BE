@@ -1,18 +1,24 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
-const app = require("./src/app");
+const connectDB = require("./src/config/db");
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, "0.0.0.0", async () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-
+const startServer = async () => {
   try {
-    console.log("⏳ Connecting to MongoDB...");
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ MongoDB connected successfully");
+    // 1. Kết nối DB trước khi load routes/models
+    await connectDB();
+
+    // 2. Load app (bao gồm routes, models, controllers)
+    const app = require("./src/app");
+
+    // 3. Lắng nghe request
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
   } catch (error) {
-    console.error("❌ MongoDB connection failed:", error.message);
-    console.log("⚠️ Application is running but Database is not connected.");
+    console.error("❌ Fatal error during startup:", error.message);
+    process.exit(1);
   }
-});
+};
+
+startServer();
